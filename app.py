@@ -2,7 +2,6 @@ import os
 from logging import error
 from dotenv import load_dotenv
 from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 
@@ -18,12 +17,6 @@ try:
     pswd_input = '#vSIS_USUARIOSENHA'
     login_button = '.Button'
     span_notas = '#ygtvlabelel10Span'
-
-    # CRIAR WEBDRIVER CHROMIUM
-    # option = Options()
-    # option.headless = True
-    # driver = webdriver.Chrome(options=option)
-    # driver.implicitly_wait(2)
 
     # CRIAR WEBDRIVER FIREFOX
     option = Options()
