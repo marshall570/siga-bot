@@ -40,7 +40,7 @@ try:
 
     driver.find_element(By.CSS_SELECTOR, span_notas).click()
 
-    for i in range(1, 9):
+    for i in range(1, 8):
         nome = driver.find_element(
             By.ID,
             f'span_vACD_DISCIPLINANOME_000{i}'
