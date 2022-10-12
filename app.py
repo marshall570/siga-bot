@@ -3,8 +3,8 @@ from logging import error
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-
 
 try:
     # CARREGAR INFO DO ALUNO COM O .ENV
@@ -21,7 +21,8 @@ try:
     # CRIAR WEBDRIVER FIREFOX
     option = Options()
     option.headless = True
-    driver = webdriver.Firefox(options=option)
+    # driver = webdriver.Firefox(options=option)
+    driver = webdriver.Chrome(options=option)
     driver.implicitly_wait(2)
 
     # OBTER NOTAS
@@ -33,16 +34,27 @@ try:
 
     driver.find_element(By.CSS_SELECTOR, span_notas).click()
 
-    for i in range(1, 8):
-        nome = driver.find_element(
-            By.ID,
-            f'span_vACD_DISCIPLINANOME_000{i}'
-        ).get_attribute('textContent')
+    for i in range(1, 10):
+        if i < 10:
+            nome = driver.find_element(
+                By.ID,
+                f'span_vACD_DISCIPLINANOME_000{i}'
+            ).get_attribute('textContent')
 
-        nota = driver.find_element(
-            By.ID,
-            f'span_vACD_ALUNOHISTORICOITEMMEDIAFINAL_000{i}'
-        ).get_attribute('textContent')
+            nota = driver.find_element(
+                By.ID,
+                f'span_vACD_ALUNOHISTORICOITEMMEDIAFINAL_000{i}'
+            ).get_attribute('textContent')
+        else:
+            nome = driver.find_element(
+                By.ID,
+                f'span_vACD_DISCIPLINANOME_00{i}'
+            ).get_attribute('textContent')
+
+            nota = driver.find_element(
+                By.ID,
+                f'span_vACD_ALUNOHISTORICOITEMMEDIAFINAL_00{i}'
+            ).get_attribute('textContent')
 
         print(f'{nota} - {nome}')
 
