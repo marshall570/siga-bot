@@ -1,9 +1,10 @@
 import os
+from plyer import notification
 from logging import error
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+# from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 
 try:
@@ -12,6 +13,8 @@ try:
     user = os.getenv('USER-LOGIN')
     pswd = os.getenv('USER-PSWD')
 
+    grades = ''
+    
     # SELECTORS NECESSÁRIOS
     user_input = '#vSIS_USUARIOID'
     pswd_input = '#vSIS_USUARIOSENHA'
@@ -19,11 +22,23 @@ try:
     span_notas = '#ygtvlabelel10Span'
 
     # CRIAR WEBDRIVER FIREFOX
-    option = Options()
-    option.headless = True
-    # driver = webdriver.Firefox(options=option)
-    driver = webdriver.Chrome(options=option)
+    firefox_options = FirefoxOptions()
+    firefox_options.headless = True
+    driver = webdriver.Firefox(options=firefox_options)
+    
+    # CRIAR WEBDRIVER CHROME
+    # chrome_options = ChromeOptions()
+    # chrome_options.headless = True
+    # driver = webdriver.Chrome(options=chrome_options)
+    
     driver.implicitly_wait(2)
+    
+    notification.notify(
+        app_name = 'SIGA',
+        title = 'EXECUTANDO',
+        message =  'Logando no sistema...',
+        timeout = 3
+    )
 
     # OBTER NOTAS
     driver.get('https://siga.cps.sp.gov.br/aluno/login.aspx')
@@ -34,6 +49,7 @@ try:
 
     driver.find_element(By.CSS_SELECTOR, span_notas).click()
 
+    
     for i in range(1, 10):
         if i < 10:
             nome = driver.find_element(
@@ -56,9 +72,22 @@ try:
                 f'span_vACD_ALUNOHISTORICOITEMMEDIAFINAL_00{i}'
             ).get_attribute('textContent')
 
-        print(f'{nota} - {nome}')
+        # print(f'{nota} - {nome}')
+        grades += f'{nota} - {nome}\n'
+
+    notification.notify(
+        app_name = 'SIGA',
+        title = 'NOTAS ATUAIS',
+        message =  grades,
+        timeout = 10
+    )
 
     driver.quit()
 
 except Exception as e:
-    error(e)
+    notification.notify(
+        app_name = 'SIGA',
+        title = 'ERRO',
+        message = e,
+        timeout = 10
+    )
