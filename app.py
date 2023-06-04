@@ -15,7 +15,7 @@ try:
     span_notas = '#ygtvlabelel10Span'
 
     firefox_options = Options()
-    firefox_options.headless = True
+    firefox_options.add_argument('-headless')
     driver = webdriver.Firefox(options=firefox_options)
     driver.implicitly_wait(2)
 
@@ -25,7 +25,12 @@ try:
     driver.find_element(By.CSS_SELECTOR, login_button).click()
     driver.find_element(By.CSS_SELECTOR, span_notas).click()
     
-    for i in range(1, 11):
+    disciplinas = driver.find_elements(
+        By.XPATH,
+        '//span[contains(@id, "span_vACD_DISCIPLINANOME")]'
+    )
+
+    for i in range(1, len(disciplinas)+1):
         if i < 10:
             nome = driver.find_element(
                 By.ID,
